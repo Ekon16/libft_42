@@ -1,0 +1,50 @@
+# **************************************************************************** #
+#                                                                              #
+#   Para compilar: make -f Makefile.tester test                                #
+#                                                                              #
+#   Si falla por falta de listas, ejecuta:                                     #
+#   make -f Makefile.tester test LISTS=0                                       #
+# **************************************************************************** #
+
+NAME        = tester
+LIBFT       = libft.a
+CC          = gcc
+LISTS       ?= 1
+CFLAGS      = -Wall -Wextra -Werror -DTEST_LISTS=$(LISTS)
+RM          = rm -rf
+
+# Colors
+GREEN       = \033[0;32m
+BLUE        = \033[0;34m
+YELLOW      = \033[0;33m
+RED         = \033[0;31m
+UP          = \033[A
+RESET       = \033[0m
+
+all: $(NAME)
+
+$(NAME): $(LIBFT)
+	@echo "$(YELLOW)Compiling Libft Tester (LISTS=$(LISTS))...$(RESET)"
+	@$(CC) $(CFLAGS) tester.c $(LIBFT) -o $(NAME)
+	@echo "$(UP)$(GREEN)Tester compiled successfully! ✅$(RESET)"
+	@echo "Run with: $(BLUE)./$(NAME)$(RESET)"
+
+$(LIBFT):
+	@echo "$(BLUE)Checking Libft.a status...$(RESET)"
+	@make -C . 
+	@echo "$(UP)$(GREEN)Libft.a is ready! 📚$(RESET)"
+
+clean:
+	@$(RM) $(NAME)
+	@echo "$(RED)Tester executable removed.$(RESET)"
+
+fclean: clean
+	@echo "$(RED)Full clean complete (Tester).$(RESET)"
+
+re: fclean all
+
+test: all
+	@echo "$(YELLOW)Starting tests...$(RESET)"
+	@./$(NAME)
+
+.PHONY: all clean fclean re test
